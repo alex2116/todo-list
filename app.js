@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 
 const exphbs = require('express-handlebars')
 
+const Todo = require('./models/todo')
+
 const app = express()
 
 mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -21,7 +23,11 @@ app.engine('hbs', exphbs({ defaultLayout:'main', extname:'.hbs'})) //副檔名�
 app.set('view engine', 'hbs')
 
 app.get('/', (req, res) => {
-  res.render('index')
+  //拿到全部的todo資料
+  Todo.find() //沒有傳入任何參數，所以會撈出整份資料
+  .lean()
+  .then(todos => res.render('index', {todos}))
+  .catch(error => console.error(error))
 })
 
 app.listen(3000, () => {
