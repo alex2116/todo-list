@@ -6,6 +6,7 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 
 const Todo = require('./models/todo')
+const { rawListeners } = require('./models/todo')
 
 const app = express()
 
@@ -48,11 +49,33 @@ app.post('/todos', (req, res) => {
 
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
-  return Todo.findById(id)
-    .lean()
-    .then(todo => res.render('detail', {todo}))
+  return Todo.findById(id) //從資料庫裡找出資料
+    .lean()                //把資料轉換成單純的JS物件
+    .then(todo => res.render('detail', {todo}))   //把資料送給前端樣板
     .catch(error => console.log(error))
 })
+
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id) //從資料庫裡找出資料
+    .lean()                //把資料轉換成單純的JS物件
+    .then(todo => res.render('edit', { todo }))   //把資料送給前端樣板
+    .catch(error => console.log(error))
+})
+
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  return Todo.findById(id) //從資料庫裡找出資料
+    .then(todo => {
+      todo.name = name
+      return todo.save()
+     })
+    .then(() => res.redirect(`/todos/${id}`))
+    .catch(error => console.log(error))
+})   
+    
+
 
 app.listen(3000, () => {
   console.log('App is running on http://localhost:3000.')
