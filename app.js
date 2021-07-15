@@ -5,6 +5,8 @@ const exphbs = require('express-handlebars')
 
 const bodyParser = require('body-parser')
 
+const methodOverride = require('method-override')
+
 const Todo = require('./models/todo')
 const { rawListeners } = require('./models/todo')
 
@@ -26,12 +28,13 @@ app.engine('hbs', exphbs({ defaultLayout:'main', extname:'.hbs'})) //副檔名�
 app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 
 app.get('/', (req, res) => {
   //拿到全部的todo資料
   Todo.find() //沒有傳入任何參數，所以會撈出整份資料
   .lean()
-  .sort({ _id: 'asc'})
+  .sort({_id: 'asc'})
   .then(todos => res.render('index', {todos})) //這邊也有return 只是省略了
   .catch(error => console.log(error))
 })
@@ -64,7 +67,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id/', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
 
@@ -81,7 +84,7 @@ app.post('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })   
     
-app.post('/todos/:id/delete', (req,res) => {
+app.delete('/todos/:id/', (req,res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
