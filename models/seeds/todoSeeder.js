@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Todo = require('../todo')
 
-mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true }) //seeder要connect 因為這是預先配置好的資料嗎？
 
 const db = mongoose.connection
 

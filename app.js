@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
   Todo.find() //沒有傳入任何參數，所以會撈出整份資料
   .lean()
   .then(todos => res.render('index', {todos})) //這邊也有return 只是省略了
-  .catch(error => console.error(error))
+  .catch(error => console.log(error))
 })
 
 app.get('/todos/new', (req,res) => {
@@ -65,10 +65,12 @@ app.get('/todos/:id/edit', (req, res) => {
 
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const { name, isDone } = req.body
+
   return Todo.findById(id) //從資料庫裡找出資料
     .then(todo => {
       todo.name = name
+      todo.isDone = isDone === 'on'
       return todo.save()
      })
     .then(() => res.redirect(`/todos/${id}`))
