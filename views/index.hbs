@@ -3,7 +3,7 @@
 <ul>
   {{#each todos}}
    <li>
-     <input type="checkbox" name="isDone" {{#if this.isDone}} checked {{/if}} disabled>
+     <input type="checkbox" name="isDone" {{#if todo.isDone}} checked {{/if}} disabled>
      {{this.name}}
      <a href="/todos/{{this._id}}">detail</a> {{!--點了這，會跑去./todos/this._id,app.get('/todos/:id'會回傳頁面--}}
      <a href="/todos/{{this._id}}/edit">edit</a> 

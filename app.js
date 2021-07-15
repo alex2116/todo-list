@@ -31,6 +31,7 @@ app.get('/', (req, res) => {
   //拿到全部的todo資料
   Todo.find() //沒有傳入任何參數，所以會撈出整份資料
   .lean()
+  .sort({ _id: 'asc'})
   .then(todos => res.render('index', {todos})) //這邊也有return 只是省略了
   .catch(error => console.log(error))
 })
@@ -70,7 +71,10 @@ app.post('/todos/:id/edit', (req, res) => {
   return Todo.findById(id) //從資料庫裡找出資料
     .then(todo => {
       todo.name = name
-      todo.isDone = isDone === 'on'
+      todo.isDone = isDone === 'on' // isDone ==='on' 為true, todo.isDone才會=true
+      //if (isDone === 'on') { 如果isDone的checkbox有打勾，就會設定為on(HTML預設) (可以說值為on？)
+      //  todo.isDone = true   如果有設定為on,todoSchma裡的isDone本來是false會變成true
+      //}                 又因為handlebars有設定{{#if todo.isDone}} checked {{/if}},isDone要為true才有checked
       return todo.save()
      })
     .then(() => res.redirect(`/todos/${id}`))
