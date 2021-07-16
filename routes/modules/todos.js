@@ -5,14 +5,14 @@ const router = express.Router()
 const Todo = require('../../models/todo')
 
 router.get('/new', (req, res) => {
-  return res.render('new') //為什這邊要return（已解）
+  return res.render('new')  
 })
 
 router.post('/', (req, res) => {
   const name = req.body.name // 從 req.body 拿出表單裡的 name 資料
 
   return Todo.create({ name })
-    .then(() => res.redirect('/'))
+    .then(() => res.redirect('/')) 
     .catch(error => console.log(error))
 })
 
