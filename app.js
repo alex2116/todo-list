@@ -5,6 +5,7 @@ const methodOverride = require('method-override')
 const routes = require('./routes')
 require('./config/mongoose')
 
+const PORT = process.env.PORT || 3000
 const app = express()
 
 app.engine('hbs', exphbs({ defaultLayout:'main', extname:'.hbs'})) //副檔名要幹嘛？
@@ -14,6 +15,6 @@ app.use(methodOverride('_method'))
 
 app.use(routes)
 
-app.listen(3000, () => {
-  console.log('App is running on http://localhost:3000.')
+app.listen(PORT, () => {
+  console.log(`App is running on http://localhost:${PORT}`)
 })
