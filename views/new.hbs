@@ -1,4 +1,8 @@
- <form action="/todos" method="POST"> {{!--用 action 屬性來定義表單資料發送的位置 這裡定義的是「用 POST 方法，把資料送給 /todos 位置 --}}
- <input type="text" placeholder="name" name="name"> {{!--因為這裡有設定 name="name"，後面我們可以用 req.body.name 拿出這個輸入框的 value。 --}}
- <button type="submit">Create</button>
+<form action="/todos" method="POST" style="display: inline;">
+  <div class="input-group">
+      <input class="form-control" type="text" placeholder="name" name="name">
+      <div class="input-group-append">
+        <button class="btn btn-success" type="submit">Create</button>
+      </div>
+  </div>
 </form>
