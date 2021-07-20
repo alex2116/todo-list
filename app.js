@@ -5,8 +5,8 @@ const methodOverride = require('method-override')
 const routes = require('./routes')
 require('./config/mongoose')
 
-const PORT = process.env.PORT || 3000
 const app = express()
+const PORT = process.env.PORT || 3000
 
 app.engine('hbs', exphbs({ defaultLayout:'main', extname:'.hbs'})) //副檔名要幹嘛？
 app.set('view engine', 'hbs')

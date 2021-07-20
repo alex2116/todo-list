@@ -32,7 +32,7 @@ router.get('/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-router.put('/:id/', (req, res) => {
+router.put('/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
 
@@ -49,7 +49,7 @@ router.put('/:id/', (req, res) => {
     .catch(error => console.log(error))
 })
 
-router.delete('/:id/', (req, res) => {
+router.delete('/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
