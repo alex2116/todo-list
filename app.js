@@ -1,4 +1,5 @@
 const express = require('express')
+const session = require('express-session')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 
@@ -10,6 +11,12 @@ const PORT = process.env.PORT || 3000
 
 app.engine('hbs', exphbs({ defaultLayout:'main', extname:'.hbs'})) //副檔名要幹嘛？
 app.set('view engine', 'hbs')
+
+app.use(session({
+  secret: "ThisIsMySecret",
+  resave: false,
+  saveUninitialized: true
+}))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
