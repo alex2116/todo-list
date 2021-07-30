@@ -9,34 +9,37 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  const userId = req.user._id
   const name = req.body.name // 從 req.body 拿出表單裡的 name 資料
-
-  return Todo.create({ name })
+  return Todo.create({ name, userId })
     .then(() => res.redirect('/')) 
     .catch(error => console.log(error))
 })
 
 router.get('/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id) //從資料庫裡找出資料
+  const userId = req.user._id
+  const _id = req.params.id
+  return Todo.findOne({ _id, userId }) //從資料庫裡找出資料
     .lean()                //把資料轉換成單純的JS物件
     .then(todo => res.render('detail', { todo }))   //把資料送給前端樣板
     .catch(error => console.log(error))
 })
 
 router.get('/:id/edit', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id) //從資料庫裡找出資料
+  const userId = req.user._id
+  const _id = req.params.id
+  return Todo.findOne({ _id, userId }) //從資料庫裡找出資料
     .lean()                //把資料轉換成單純的JS物件
     .then(todo => res.render('edit', { todo }))   //把資料送給前端樣板
     .catch(error => console.log(error))
 })
 
 router.put('/:id', (req, res) => {
-  const id = req.params.id
+  const userId = req.user._id
+  const _id = req.params.id
   const { name, isDone } = req.body
 
-  return Todo.findById(id) //從資料庫裡找出資料
+  return Todo.findOne({ _id, userId }) //從資料庫裡找出資料
     .then(todo => {
       todo.name = name
       todo.isDone = isDone === 'on' // isDone ==='on' 為true，todo.isDone才會是true
@@ -45,13 +48,14 @@ router.put('/:id', (req, res) => {
       //}                 //如果沒有打勾，todo.isDone就是false，又因為handlebars有設定{{#if todo.isDone}} checked {{/if}}，isDone要為true才有checked
       return todo.save()
     })
-    .then(() => res.redirect(`/todos/${id}`))
+    .then(() => res.redirect(`/todos/${_id}`))
     .catch(error => console.log(error))
 })
 
 router.delete('/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
+  const userId = req.user._id
+  const _id = req.params.id
+  return Todo.findOne({ _id, userId })
     .then(todo => todo.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
