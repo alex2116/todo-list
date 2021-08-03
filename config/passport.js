@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy
 
 const User = require('../models/user')
 
-module.exports = (app) => { //這裡沒有app 除出去以後參數給app
+module.exports = (app) => { 
   app.use(passport.initialize()); 
   app.use(passport.session());
 

@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const User = require('../../models/user')
 
@@ -21,7 +22,7 @@ router.post('/register', (req, res) => {
   const { name, email, password, confirmPassword } = req.body
   const errors = []
 
-  if(!name || email || password || confirmPassword){
+  if(!name || !email || !password || !confirmPassword){
     errors.push({ message: '所有欄位都是必填'})
   }
   if (password !== confirmPassword) {
@@ -49,12 +50,18 @@ router.post('/register', (req, res) => {
         confirmPassword
       })
     } 
-      // 如果還沒註冊：寫入資料庫
-    return User.create({
-      name,
-      email,
-      password
-    })
+
+    return bcrypt
+      .genSalt(10)
+      .then(salt => {
+        return bcrypt.hash(password, salt)})
+      .then(hash => {
+        return User.create({
+          name,
+          email,
+          password: hash
+        })
+      })
       .then(() => res.redirect('/'))
       .catch(err => console.log(err))
     
